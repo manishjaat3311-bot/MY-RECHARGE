@@ -6,153 +6,96 @@
     <title>Jio Recharge Portal</title>
     <style>
         :root { --jio-blue: #0a2885; --bg: #f5f7fa; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 0; }
+        body { font-family: sans-serif; background: var(--bg); margin: 0; }
         .hidden { display: none; }
         
-        /* Loading Screen */
-        .loader-container { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: white; }
-        .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid var(--jio-blue); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* Loader */
+        .loader { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: white; }
+        .spin { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--jio-blue); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* Step 1: Login */
-        .card { background: white; margin: 50px auto; width: 90%; max-width: 400px; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
-        input, select { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
-        .btn-main { background: var(--jio-blue); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 18px; }
-
-        /* Step 2: Plans Page */
-        .header { background: var(--jio-blue); color: white; padding: 15px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; }
-        .plan-card { background: white; margin: 12px; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #eee; }
-        .plan-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .price-box h2 { margin: 0; font-size: 28px; }
-        .true-5g { color: #d32f2f; font-weight: bold; font-size: 12px; font-style: italic; }
-        .plan-info { display: flex; gap: 25px; padding: 0 15px 15px; color: #555; font-size: 13px; }
-        .plan-info b { display: block; color: black; font-size: 18px; }
-        .ott-strip { background: #f9f9f9; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; }
-        .ott-icons img { width: 25px; height: 25px; border-radius: 5px; margin-right: 5px; }
-        .buy-btn { background: var(--jio-blue); color: white; border: none; padding: 8px 25px; border-radius: 20px; font-weight: bold; cursor: pointer; }
-
-        /* Success Screen */
-        .success-box { text-align: center; padding: 50px 20px; }
-        .checkmark { font-size: 80px; color: #2ecc71; }
+        /* UI Elements */
+        .card { background: white; margin: 20px auto; width: 90%; max-width: 400px; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
+        .btn-pay { background: var(--jio-blue); color: white; border: none; width: 100%; padding: 15px; border-radius: 25px; font-weight: bold; font-size: 18px; cursor: pointer; }
+        .plan-box { background: white; margin: 10px; padding: 15px; border-radius: 12px; border: 1px solid #ddd; position: relative; }
+        .badge { background: #fff3e0; color: #e65100; font-size: 11px; padding: 3px 8px; border-radius: 5px; font-weight: bold; display: inline-block; margin-bottom: 5px; }
     </style>
 </head>
 <body>
 
-    <div id="step-1">
+    <div id="step1">
         <div class="card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/be/Jio_logo.svg" width="60" style="margin-bottom: 20px;">
             <h2>Quick Recharge</h2>
-            <input type="tel" id="mobile" placeholder="Enter Mobile Number" maxlength="10">
-            <select id="operator">
-                <option value="jio">Jio (True 5G)</option>
-                <option value="airtel">Airtel (5G Plus)</option>
-                <option value="vi">Vi (Hero Unlimited)</option>
-            </select>
-            <button class="btn-main" onclick="showLoader('step-1', 'step-2')">Get Plans →</button>
+            <input type="tel" id="num" placeholder="Enter Mobile Number" style="width:100%; padding:12px; margin:10px 0; border:1px solid #ccc; border-radius:8px;">
+            <button class="btn-pay" onclick="nav('step1', 'step2')">Get Plans →</button>
         </div>
     </div>
 
     <div id="loader" class="hidden">
-        <div class="loader-container">
-            <div class="spinner"></div>
-            <h3 style="margin-top: 20px; color: #555;">Processing, please wait...</h3>
-        </div>
+        <div class="loader"><div class="spin"></div><p>Please wait...</p></div>
     </div>
 
-    <div id="step-2" class="hidden">
-        <div class="header">
-            <span style="font-size: 20px; cursor: pointer;" onclick="location.reload()">←</span>
-            <span style="margin-left: 15px;">Truly Unlimited Plans</span>
-        </div>
-        <div id="plan-container">
-            </div>
+    <div id="step2" class="hidden">
+        <h3 style="padding:15px; color:var(--jio-blue);">Popular Plans</h3>
+        <div id="plans-list"></div>
     </div>
 
-    <div id="step-3" class="hidden">
+    <div id="step3" class="hidden">
         <div class="card">
-            <h3>Redirecting to Payment...</h3>
-            <p>Please complete payment in your UPI App.</p>
-            <button class="btn-main" onclick="simulatePaymentSuccess()">Demo Success (Click after Payment)</button>
-        </div>
-    </div>
-
-    <div id="step-4" class="hidden">
-        <div class="card success-box">
-            <div class="checkmark">✔</div>
-            <h2 style="color: #2ecc71;">Recharge Successful!</h2>
-            <p>Your plan will be activated within 5 minutes.</p>
-            <button class="btn-main" onclick="location.reload()">Done</button>
+            <h2 id="disp-price">₹349</h2>
+            <div class="badge">Pro Google Gemini worth ₹35,100</div>
+            <p><strong>Merchant:</strong> Guru kripa mobile...</p>
+            <img src="qr.jpg" style="width:180px; margin:10px auto; display:block; border:1px solid #eee;">
+            <button class="btn-pay" id="pay-link">Pay Now</button>
         </div>
     </div>
 
     <script>
-        let selectedMobile = "";
+        // Shop UPI ID from your QR photo
+        const shopUPI = "Q180904571@ybl"; 
+        const shopName = "Guru Kripa Mobile";
+        let amount = 0;
 
-        // Function for 3-second loading
-        function showLoader(currentStepId, nextStepId) {
-            if(currentStepId === 'step-1') {
-                selectedMobile = document.getElementById('mobile').value;
-                if(selectedMobile.length < 10) return alert("Sahi number dalein");
-            }
-
-            document.getElementById(currentStepId).classList.add('hidden');
+        function nav(old, next) {
+            document.getElementById(old).classList.add('hidden');
             document.getElementById('loader').classList.remove('hidden');
-
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
-                document.getElementById(nextStepId).classList.remove('hidden');
-                if(nextStepId === 'step-2') renderPlans();
-            }, 3000); // 3 seconds
+                document.getElementById(next).classList.remove('hidden');
+                if(next === 'step2') render();
+            }, 3000); // 3 Second delay
         }
 
-        function renderPlans() {
-            const container = document.getElementById('plan-container');
-            container.innerHTML = "";
-            
-            // 10+ Plans as requested
+        function render() {
             const plans = [
-                {p: 239, v: "28 Days", d: "1.5 GB/Day"},
-                {p: 299, v: "28 Days", d: "2 GB/Day"},
-                {p: 349, v: "30 Days", d: "2.5 GB/Day"},
-                {p: 479, v: "56 Days", d: "1.5 GB/Day"},
-                {p: 666, v: "84 Days", d: "1.5 GB/Day"},
-                {p: 719, v: "84 Days", d: "2 GB/Day"},
-                {p: 749, v: "90 Days", d: "2 GB/Day"},
-                {p: 839, v: "84 Days", d: "3 GB/Day"},
-                {p: 999, v: "84 Days", d: "Unlimited 5G"},
-                {p: 2999, v: "365 Days", d: "2.5 GB/Day"},
-                {p: 3599, v: "365 Days", d: "Unlimited 5G"}
+                {p: 349, v: "28 Days", d: "2 GB/Day"},
+                {p: 500, v: "28 Days", d: "2 GB/Day"},
+                {p: 899, v: "90 Days", d: "2 GB/Day + 20GB"},
+                {p: 3599, v: "365 Days", d: "2.5 GB/Day"}
             ];
-
+            let html = "";
             plans.forEach(plan => {
-                container.innerHTML += `
-                <div class="plan-card">
-                    <div class="plan-header">
-                        <div class="price-box">
-                            <h2>₹${plan.p}</h2>
-                            <span style="color: #666; font-size: 12px;">Truly Unlimited Voice</span>
-                        </div>
-                        <div class="true-5g">TRUE 5G</div>
+                html += `<div class="plan-box">
+                    <div class="badge">PRO GOOGLE GEMINI</div>
+                    <div style="display:flex; justify-content:space-between;">
+                        <span style="font-size:22px; font-weight:bold;">₹${plan.p}</span>
+                        <span style="color:red; font-style:italic; font-size:12px;">TRUE 5G</span>
                     </div>
-                    <div class="plan-info">
-                        <div>Validity<b>${plan.v}</b></div>
-                        <div>Data<b>${plan.d}</b></div>
-                    </div>
-                    <div class="ott-strip">
-                        <div class="ott-icons">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_Hotstar_logo.png">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Amazon_Prime_Video_logo.svg/1200px-Amazon_Prime_Video_logo.svg.png">
-                            <span style="font-size: 12px; color: #777;">+3 more</span>
-                        </div>
-                        <button class="buy-btn" onclick="showLoader('step-2', 'step-3')">Buy</button>
-                    </div>
+                    <button style="float:right; background:var(--jio-blue); color:white; border:none; padding:8px 20px; border-radius:20px; margin-top:-20px;" onclick="openPay(${plan.p})">Buy</button>
+                    <div style="font-size:13px; color:#666; margin-top:10px;">Validity: <b>${plan.v}</b> | Data: <b>${plan.d}</b></div>
                 </div>`;
             });
+            document.getElementById('plans-list').innerHTML = html;
         }
 
-        function simulatePaymentSuccess() {
-            // Jab gateway se 'Success' response milega tab ye chalega
-            showLoader('step-3', 'step-4');
+        function openPay(p) {
+            amount = p;
+            document.getElementById('disp-price').innerText = "₹" + p;
+            // UPI Deep Link for direct App opening
+            document.getElementById('pay-link').onclick = function() {
+                window.location.href = `upi://pay?pa=${shopUPI}&pn=${encodeURIComponent(shopName)}&am=${amount}&cu=INR`;
+            };
+            nav('step2', 'step3');
         }
     </script>
 </body>
