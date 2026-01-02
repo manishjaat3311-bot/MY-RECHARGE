@@ -115,7 +115,7 @@
             ];
             plans.forEach(plan => {
                 container.innerHTML += `<div class="plan-card">
-                    <div class="plan-header"><div><h2 style="margin:0">₹${plan.p}</h2><small>Truly Unlimited</small></div><div style="color:red; font-weight:bold;">5G</div></div>
+                    <div class="plan-header"><div><h2 style="margin:0">₹${plan.p}</h2><small>Truly Unlimited</small></div><div style="color:red; font-weight:bold;">true5G unlimited</div></div>
                     <div style="padding:0 15px 15px; font-size:13px;">Validity: <b>${plan.v}</b> | Data: <b>${plan.d}</b></div>
                     <button class="btn-main" style="border-radius:0;" onclick="showLoader('step-2', 'step-3', ${plan.p})">Buy Now</button>
                 </div>`;
@@ -148,3 +148,4 @@
     </script>
 </body>
 </html>
+
