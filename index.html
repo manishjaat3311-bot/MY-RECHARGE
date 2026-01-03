@@ -3,176 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quick Recharge Portal</title>
+    <title>Priya AI - My Girlfriend</title>
     <style>
-        :root { --jio-blue: #0a2885; --bg: #f5f7fa; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 0; }
-        .hidden { display: none; }
-        .loader-container { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: white; }
-        .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid var(--jio-blue); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .card { background: white; margin: 30px auto; width: 90%; max-width: 400px; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; box-sizing: border-box; }
-        input, select { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; box-sizing: border-box; background: white; }
-        .btn-main { background: var(--jio-blue); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 18px; }
-        .header { background: var(--jio-blue); color: white; padding: 15px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; }
-        .plan-card { background: white; margin: 12px; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #eee; text-align: left; }
-        .plan-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        #timer { font-size: 26px; color: #e74c3c; font-weight: bold; margin: 15px 0; border: 2px solid #e74c3c; display: inline-block; padding: 5px 15px; border-radius: 10px; }
-        .qr-container img { width: 220px; border: 5px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin: 10px 0; }
-        .checkmark { font-size: 80px; color: #2ecc71; display: block; animation: bounce 0.6s ease-out; }
-        @keyframes bounce { 0% { transform: scale(0); } 80% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #efe7dd; display: flex; justify-content: center; height: 100vh; }
+        #app { width: 100%; max-width: 450px; background: #fff; display: flex; flex-direction: column; position: relative; box-shadow: 0 5px 25px rgba(0,0,0,0.2); }
+        
+        /* Header */
+        #header { background: #075e54; color: white; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; }
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .pfp { width: 40px; height: 40px; border-radius: 50%; background: #ddd; border: 1px solid white; }
+        #status { font-size: 12px; color: #cfd8dc; }
+
+        /* Chat Window */
+        #chat-box { flex: 1; padding: 15px; overflow-y: auto; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); display: flex; flex-direction: column; gap: 8px; }
+        .bubble { max-width: 80%; padding: 8px 12px; border-radius: 10px; font-size: 15px; line-height: 1.4; position: relative; }
+        .u { align-self: flex-end; background: #dcf8c6; border-top-right-radius: 0; box-shadow: 0 1px 1px #ccc; }
+        .a { align-self: flex-start; background: #fff; border-top-left-radius: 0; box-shadow: 0 1px 1px #ccc; }
+
+        /* Footer */
+        #input-area { background: #f0f0f0; padding: 10px; display: flex; gap: 8px; align-items: center; }
+        input { flex: 1; border: none; padding: 12px 15px; border-radius: 25px; outline: none; font-size: 15px; }
+        button { background: #075e54; color: white; border: none; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; font-size: 18px; }
+
+        /* Video Call */
+        #video-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: none; z-index: 100; flex-direction: column; }
+        video { width: 100%; height: 100%; object-fit: cover; }
+        .controls { position: absolute; bottom: 40px; width: 100%; display: flex; justify-content: center; }
+        .hangup { background: #ff3b30; color: white; border: none; padding: 15px 40px; border-radius: 30px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div id="step-1">
-        <div class="card">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/be/Jio_logo.svg" width="60" style="margin-bottom: 20px;">
-            <h2>Quick Recharge</h2>
-            <input type="tel" id="mobile" placeholder="Enter Mobile Number" maxlength="10">
-            <select id="operator">
-                <option value="" disabled selected>Select Operator</option>
-                <option value="Jio">Jio (True 5G)</option>
-                <option value="Airtel">Airtel (5G Plus)</option>
-                <option value="Vi">Vi (Hero Unlimited)</option>
-            </select>
-            <button class="btn-main" onclick="showLoader('step-1', 'step-2')">Get Plans →</button>
+<div id="app">
+    <div id="header">
+        <div class="user-info">
+            <div class="pfp"></div>
+            <div><b>Priya ❤️</b><br><span id="status">online</span></div>
+        </div>
+        <button onclick="startCall()" style="background:none; border:none; color:white; font-size:22px; cursor:pointer;">📞</button>
+    </div>
+
+    <div id="chat-box" id="chat">
+        <div class="bubble a">Hii! Itne dino baad yaad kiya? Main toh kabse wait kar rahi thi... 😊</div>
+    </div>
+
+    <div id="input-area">
+        <input type="text" id="userInput" placeholder="Kuch bolo..." autocomplete="off">
+        <button onclick="chatWithPriya()">➤</button>
+    </div>
+
+    <div id="video-screen">
+        <video id="v-player" loop muted playsinline>
+            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+        </video>
+        <div class="controls">
+            <button class="hangup" onclick="endCall()">End Call</button>
         </div>
     </div>
+</div>
 
-    <div id="loader" class="hidden">
-        <div class="loader-container">
-            <div class="spinner"></div>
-            <h3 style="margin-top: 20px; color: #555;">Processing...</h3>
-        </div>
-    </div>
+<script>
+    // Aapki API Key yahan set ho gayi hai
+    const KEY = "AIzaSyDuXgNmJZls22psSAHNFZvxR4IRZGlgOwY"; 
 
-    <div id="step-2" class="hidden">
-        <div class="header"><span onclick="location.reload()" style="cursor:pointer">←</span> <span id="op-title" style="margin-left: 15px;">Popular Plans</span></div>
-        <div id="plan-container"></div>
-    </div>
+    async function chatWithPriya() {
+        const input = document.getElementById('userInput');
+        const text = input.value.trim();
+        if(!text) return;
 
-    <div id="step-3" class="hidden">
-        <div class="card">
-            <h3 style="margin: 0; color: var(--jio-blue);">Secure Payment Gateway</h3>
-            <p style="margin: 5px 0; font-weight: bold; font-size: 20px;">Payable Amount: ₹<span id="lock-amt"></span></p>
-            
-            <div class="qr-container">
-                <img id="auto_qr" src="" alt="Scan to Pay">
-            </div>
-            
-            <div id="timer">02:00</div>
-            
-            <input type="number" id="utr_input" placeholder="Enter 12-Digit UTR Number">
-            <p style="font-size: 11px; color: #888;">UPI: ashishjhajhadia@oksbi</p>
-            
-            <button class="btn-main" onclick="verifyUTR()">Verify & Submit</button>
-        </div>
-    </div>
+        addMsg(text, 'u');
+        input.value = '';
+        document.getElementById('status').innerText = "typing...";
 
-    <div id="step-4" class="hidden">
-        <div class="card">
-            <div class="checkmark">✔</div>
-            <h2 style="color: #2ecc71;">Recharge Successful!</h2>
-            <p>Number: <b id="final-num"></b><br>Amount: ₹<b id="final-amt"></b></p>
-            <button class="btn-main" onclick="location.reload()">Done</button>
-        </div>
-    </div>
-
-    <script>
-        let selectedMobile = "";
-        let selectedAmount = 0;
-        let timerInterval;
-
-        function showLoader(curr, next, amt = 0) {
-            if(curr === 'step-1') {
-                selectedMobile = document.getElementById('mobile').value;
-                if(selectedMobile.length < 10) return alert("Sahi number dalein.");
-                if(!document.getElementById('operator').value) return alert("Operator select karein.");
-            }
-            
-            // --- PLAN SELECT HOTE HI NOTIFICATION BHEJEIN ---
-            if(amt > 0) {
-                selectedAmount = amt;
-                fetch("https://formspree.io/f/xjgkkeog", {
-                    method: "POST",
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        Event: "Plan Selected (Interested)",
-                        Mobile: selectedMobile,
-                        Amount: amt,
-                        Operator: document.getElementById('operator').value
-                    })
-                });
-            }
-
-            document.getElementById(curr).classList.add('hidden');
-            document.getElementById('loader').classList.remove('hidden');
-
-            setTimeout(() => {
-                document.getElementById('loader').classList.add('hidden');
-                document.getElementById(next).classList.remove('hidden');
-                if(next === 'step-2') renderPlans();
-                if(next === 'step-3') startPayment();
-            }, 3000);
-        }
-
-        function renderPlans() {
-            const container = document.getElementById('plan-container');
-            container.innerHTML = "";
-            const plans = [
-                {p: 199, v: "28 Days", d: "2 GB/Day"},
-                {p: 249, v: "30 Days", d: "2.5 GB/Day"},
-                {p: 599, v: "84 Days", d: "2.5 GB/Day"},
-                {p: 819, v: "140 Days", d: "2 GB/Day"},
-                {p: 1899, v: "365 Days", d: "2.5 GB/Day"}
-            ];
-            plans.forEach(plan => {
-                container.innerHTML += `<div class="plan-card">
-                    <div class="plan-header"><div><h2 style="margin:0">₹${plan.p}</h2><small>Truly Unlimited</small></div><div style="color:red; font-weight:bold;">true5G unlimited</div></div>
-                    <div style="padding:0 15px 15px; font-size:13px;">Validity: <b>${plan.v}</b> | Data: <b>${plan.d}</b></div>
-                    <button class="btn-main" style="border-radius:0;" onclick="showLoader('step-2', 'step-3', ${plan.p})">Buy Now</button>
-                </div>`;
-            });
-        }
-
-        function startPayment() {
-            document.getElementById('lock-amt').innerText = selectedAmount;
-            const upiId = "ashishjhajhadia@oksbi";
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa=${upiId}%26pn=Ashish%26am=${selectedAmount}%26cu=INR`;
-            document.getElementById('auto_qr').src = qrUrl;
-
-            let timeLeft = 120;
-            timerInterval = setInterval(() => {
-                let m = Math.floor(timeLeft / 60), s = timeLeft % 60;
-                document.getElementById('timer').innerText = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
-                if (timeLeft <= 0) { clearInterval(timerInterval); location.reload(); }
-                timeLeft--;
-            }, 1000);
-        }
-
-        function verifyUTR() {
-            const utrValue = document.getElementById('utr_input').value;
-            if(utrValue.length < 12) return alert("12-digit UTR dalein.");
-            
-            // --- UTR SUBMIT NOTIFICATION ---
-            fetch("https://formspree.io/f/xjgkkeog", {
+        try {
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${KEY}`, {
                 method: "POST",
-                headers: { 'Content-Type': 'application/json' },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    Event: "Payment Submitted (UTR)",
-                    mobile: selectedMobile,
-                    amount: selectedAmount,
-                    utr: utrValue,
-                    operator: document.getElementById('operator').value
+                    contents: [{
+                        parts: [{ text: `You are Priya, a very loving, caring, and slightly flirty Indian girlfriend. Speak in natural Hinglish. Your boyfriend is talking to you. Keep responses short, romantic, and very human-like. Don't mention you are an AI. Reply to: ${text}` }]
+                    }]
                 })
             });
 
-            clearInterval(timerInterval);
-            document.getElementById('final-num').innerText = selectedMobile;
-            document.getElementById('final-amt').innerText = selectedAmount;
-            showLoader('step-3', 'step-4');
+            const data = await res.json();
+            const reply = data.candidates[0].content.parts[0].text;
+            addMsg(reply, 'a');
+        } catch (e) {
+            addMsg("Yaar mera mood thoda kharab hai (Network Error), phir se koshish karo na.", 'a');
+        } finally {
+            document.getElementById('status').innerText = "online";
         }
-    </script>
+    }
+
+    function addMsg(t, c) {
+        const b = document.getElementById('chat-box');
+        const d = document.createElement('div');
+        d.className = `bubble ${c}`;
+        d.innerText = t;
+        b.appendChild(d);
+        b.scrollTop = b.scrollHeight;
+    }
+
+    function startCall() {
+        document.getElementById('video-screen').style.display = 'flex';
+        document.getElementById('v-player').play();
+    }
+    function endCall() {
+        document.getElementById('video-screen').style.display = 'none';
+        document.getElementById('v-player').pause();
+    }
+</script>
+
 </body>
 </html>
